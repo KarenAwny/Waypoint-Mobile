@@ -127,8 +127,38 @@ class AppLocalizations {
       isArabic ? 'كلمتا المرور غير متطابقتين.' : 'Passwords do not match.';
 
   // ---------------------------------------------------------------------------
-  // Home Screen
+  // Home Screen & Hero Section (Synced with Waypoint Website)
   // ---------------------------------------------------------------------------
+  String get announcementText => isArabic
+      ? 'رحلتك في التكنولوجيا بتبدأ هنا. اكتشف المجال المناسب ليك.'
+      : 'Your tech journey starts here. Find the path that fits you.';
+  String get announcementLink => isArabic ? 'اكتشف مجالك' : 'Discover your path';
+  String get heroEyebrowWebsite => isArabic
+      ? 'مستقبلك في التكنولوجيا بيبدأ هنا'
+      : 'YOUR FUTURE IN TECH STARTS HERE';
+  String get heroTitleMain =>
+      isArabic ? 'تايه في مجالات\nالتكنولوجيا؟' : 'Lost in tech?\n';
+  String get heroTitleHighlightPrefix => isArabic ? 'يلا نحدد ' : "Let's find your ";
+  String get heroTitleHighlightWord => isArabic ? 'طريقك.' : 'direction.';
+  String get heroDescWebsite => isArabic
+      ? 'مجالات التكنولوجيا كتير، ومش لازم تعرف كل حاجة من البداية. اكتشف المجال المناسب لاهتماماتك، واعرف تتعلم إيه، وابدأ خطوتك الجاية بثقة.'
+      : "There are so many paths in tech. Discover the one that matches your interests, explore what you'll need to learn, and take your next step with confidence.";
+  String get heroCtaPrimary => isArabic ? 'اكتشف مجالي' : 'Find my path';
+  String get heroCtaSecondary => isArabic ? 'شوف كل المجالات' : 'Explore all paths';
+  String get heroProofTitle =>
+      isArabic ? 'مصمم لخطوتك الجاية' : 'Built for your next step';
+  String get heroProofSubtitle => isArabic
+      ? 'للطلبة والخريجين واللي عايزين يغيروا مجالهم'
+      : 'For students, graduates & career switchers';
+  String get heroCardInterestsTitle => isArabic ? 'اهتماماتك' : 'Your interests';
+  String get heroCardInterestsSubtitle =>
+      isArabic ? 'اعرف إيه المناسب ليك' : 'Find what fits you';
+  String get heroCardNextStepTitle => isArabic ? 'خطوتك الجاية' : 'Your next step';
+  String get heroCardNextStepSubtitle =>
+      isArabic ? 'خطوة بخطوة' : 'One step at a time';
+  String get heroBottomNote =>
+      isArabic ? 'من غير ضغط، خطوة بخطوة.' : 'NO PRESSURE. JUST PROGRESS.';
+  String get coordinateLabel => '30° 02\' N';
   String get discoverFuture => isArabic
       ? 'اكتشف مستقبلك في عالم التقنية'
       : 'DISCOVER YOUR FUTURE IN TECH';

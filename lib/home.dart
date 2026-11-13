@@ -6,7 +6,7 @@ import 'l10n/app_localizations.dart';
 import 'Screen1.dart';
 import 'Screen2.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   // Exact Waypoint Brand Colors
@@ -20,56 +20,95 @@ class HomeScreen extends StatelessWidget {
       keyId: 'frontend',
       icon: Icons.laptop_chromebook_rounded,
       color: neonLime,
+      imageAsset: 'assets/images/track_frontend.png',
     ),
     const CareerTrackInfo(
       keyId: 'backend',
       icon: Icons.dns_rounded,
       color: softPurple,
+      imageAsset: 'assets/images/track_backend.png',
     ),
     const CareerTrackInfo(
       keyId: 'mobile',
       icon: Icons.phone_android_rounded,
       color: neonLime,
+      imageAsset: 'assets/images/track_mobile.png',
     ),
     const CareerTrackInfo(
       keyId: 'cybersecurity',
       icon: Icons.shield_rounded,
       color: softPurple,
+      imageAsset: 'assets/images/track_cybersecurity.png',
     ),
     const CareerTrackInfo(
       keyId: 'data',
       icon: Icons.insights_rounded,
       color: neonLime,
+      imageAsset: 'assets/images/track_data.png',
     ),
     const CareerTrackInfo(
       keyId: 'uiux',
       icon: Icons.palette_rounded,
       color: softPurple,
+      imageAsset: 'assets/images/track_uiux.png',
     ),
   ];
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  static const Color background = HomeScreen.background;
+  static const Color neonLime = HomeScreen.neonLime;
+  static const Color softPurple = HomeScreen.softPurple;
+  static const Color card = HomeScreen.card;
+
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _tracksKey = GlobalKey();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTracks() {
+    if (_tracksKey.currentContext != null) {
+      Scrollable.ensureVisible(
+        _tracksKey.currentContext!,
+        duration: const Duration(milliseconds: 650),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: HomeScreen.background,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1140),
             child: SingleChildScrollView(
+              controller: _scrollController,
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top Announcement Pill matching website
+                  _buildAnnouncementBar(context, l10n),
+
                   // Top Bar / Branding & Profile Icon
                   _buildTopBar(context, l10n),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 22),
 
-                  // Hero Welcome Section
+                  // Hero Welcome Section matching website exactly
                   _buildHeroSection(context, l10n),
 
                   const SizedBox(height: 24),
@@ -84,6 +123,7 @@ class HomeScreen extends StatelessWidget {
 
                   // Section Header: Career Tracks
                   Row(
+                    key: _tracksKey,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -105,14 +145,14 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: card,
+                          color: HomeScreen.card,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: Colors.white.withValues(alpha: 0.08),
                           ),
                         ),
                         child: Text(
-                          l10n.tracksCount(tracks.length),
+                          l10n.tracksCount(HomeScreen.tracks.length),
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -125,7 +165,7 @@ class HomeScreen extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // Career Tracks Grid
+                  // Career Tracks Grid with Domain Illustrations
                   _buildCareerTracksGrid(context, l10n),
 
                   const SizedBox(height: 30),
@@ -143,124 +183,170 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBar(BuildContext context, AppLocalizations l10n) {
-    final authService = AuthService();
-    final user = authService.currentUser;
-    final isGuest = authService.isGuest;
-    final localeService = LocaleService();
-
-    return Row(
-      children: [
-        Container(
-          width: 44,
-          height: 44,
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: card,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: neonLime.withValues(alpha: 0.35),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: neonLime.withValues(alpha: 0.2),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Image.asset(
-            'assets/images/logo_mark.png',
-            fit: BoxFit.contain,
+  Widget _buildAnnouncementBar(BuildContext context, AppLocalizations l10n) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const Screen1()),
+        );
+      },
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: const Color(0xFF13131D),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.08),
           ),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.appName.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                  color: Colors.white,
-                ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: HomeScreen.neonLime,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: HomeScreen.neonLime,
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                  ),
+                ],
               ),
-              Text(
-                l10n.careerNavigationPlatform,
+            ),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                l10n.announcementText,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
+                  color: Colors.white70,
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white54,
-                  letterSpacing: 0.2,
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              '${l10n.announcementLink} ↗',
+              style: const TextStyle(
+                color: HomeScreen.neonLime,
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
         ),
-        // Quick Language Switcher Pill
+      ),
+    );
+  }
+
+  Widget _buildTopBar(BuildContext context, AppLocalizations l10n) {
+    final localeService = LocaleService();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Language Switcher button (matching screenshot 2)
         InkWell(
           onTap: () => localeService.toggleLanguage(),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: card,
-              borderRadius: BorderRadius.circular(20),
+              color: HomeScreen.card,
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: neonLime.withValues(alpha: 0.3),
+                color: Colors.white.withValues(alpha: 0.15),
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.language_rounded,
-                  color: neonLime,
-                  size: 15,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  localeService.isArabic ? 'EN' : 'عربي',
-                  style: const TextStyle(
-                    color: neonLime,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
+            child: Text(
+              localeService.isArabic ? 'English' : 'عربي',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
-        const SizedBox(width: 8),
-        // Connected Profile Icon Button
-        IconButton(
-          onPressed: () => _showProfileSheet(context, l10n),
-          tooltip: l10n.userProfile,
-          icon: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: card,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: (isGuest && user == null)
-                    ? softPurple.withValues(alpha: 0.5)
-                    : neonLime.withValues(alpha: 0.5),
-                width: 1.5,
+
+        // Brand Logo + Menu Icon on the other side (matching screenshot 2)
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Hamburger Menu / Profile button
+            InkWell(
+              onTap: () => _showProfileSheet(context, l10n),
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: HomeScreen.card,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.15),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.menu_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
-            child: Icon(
-              (isGuest && user == null)
-                  ? Icons.rocket_launch_rounded
-                  : Icons.person_rounded,
-              color: (isGuest && user == null) ? softPurple : neonLime,
-              size: 19,
+            const SizedBox(width: 10),
+            // Logo Mark + Name ".Waypoint"
+            InkWell(
+              onTap: () => _showProfileSheet(context, l10n),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
+                        color: Colors.white,
+                      ),
+                      children: [
+                        const TextSpan(
+                          text: '.',
+                          style: TextStyle(color: HomeScreen.neonLime),
+                        ),
+                        TextSpan(text: l10n.appName),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 36,
+                    height: 36,
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: HomeScreen.card,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: HomeScreen.neonLime.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Image.asset(
+                      'assets/images/logo_mark.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );
@@ -269,108 +355,518 @@ class HomeScreen extends StatelessWidget {
   Widget _buildHeroSection(BuildContext context, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
       decoration: BoxDecoration(
-        color: card,
-        borderRadius: BorderRadius.circular(24),
+        color: HomeScreen.card,
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.08),
         ),
         gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [
-            card,
-            Color(0xFF1C1C28),
+            Color(0xFF14141E),
+            Color(0xFF0E0E16),
           ],
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: softPurple.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: softPurple.withValues(alpha: 0.4),
+          // Eyebrow with decorative lines: —— مستقبلك في التكنولوجيا بيبدأ هنا ——
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 26,
+                height: 1.5,
+                color: HomeScreen.neonLime.withValues(alpha: 0.6),
               ),
-            ),
-            child: Text(
-              l10n.discoverFuture,
-              style: const TextStyle(
-                color: softPurple,
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.2,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.findYourPath,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w900,
-              height: 1.18,
-              letterSpacing: -0.8,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.heroDescription,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white70,
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 22),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const Screen1()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: neonLime,
-                foregroundColor: background,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  l10n.heroEyebrowWebsite,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: HomeScreen.neonLime,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      l10n.startCareerAssessment,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+              const SizedBox(width: 8),
+              Container(
+                width: 26,
+                height: 1.5,
+                color: HomeScreen.neonLime.withValues(alpha: 0.6),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          // Main Headline with glowing highlighted "طريقك."
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.w900,
+                height: 1.25,
+                letterSpacing: -0.6,
+                color: Colors.white,
+              ),
+              children: [
+                TextSpan(text: '${l10n.heroTitleMain}\n'),
+                TextSpan(text: l10n.heroTitleHighlightPrefix),
+                TextSpan(
+                  text: l10n.heroTitleHighlightWord,
+                  style: const TextStyle(
+                    color: HomeScreen.neonLime,
+                    shadows: [
+                      Shadow(
+                        color: HomeScreen.neonLime,
+                        blurRadius: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Hero Description paragraph
+          Text(
+            l10n.heroDescWebsite,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.white70,
+              height: 1.6,
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // CTAs: Primary ("اكتشف مجالي ↗") & Secondary ("شوف كل المجالات ↓")
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const Screen1()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HomeScreen.neonLime,
+                  foregroundColor: HomeScreen.background,
+                  elevation: 0,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.heroCtaPrimary,
                       style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.2,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(
+                      Icons.north_east_rounded,
+                      size: 16,
+                      color: HomeScreen.background,
+                    ),
+                  ],
+                ),
+              ),
+              OutlinedButton(
+                onPressed: _scrollToTracks,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                  side: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.15),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.heroCtaSecondary,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(
+                      Icons.arrow_downward_rounded,
+                      size: 16,
+                      color: HomeScreen.neonLime,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // Proof Chip: "مصمم لخطوتك الجاية"
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF111119),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.06),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: HomeScreen.neonLime.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    '✳',
+                    style: TextStyle(
+                      color: HomeScreen.neonLime,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l10n.heroProofTitle,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 1),
+                      Text(
+                        l10n.heroProofSubtitle,
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // High-Tech Radar / Compass Visual from Screenshot 2
+          _buildCompassRadarVisual(context, l10n),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompassRadarVisual(BuildContext context, AppLocalizations l10n) {
+    return Container(
+      width: double.infinity,
+      constraints: const BoxConstraints(maxWidth: 380),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0D0D14),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.06),
+        ),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Radar Orbits Canvas
+          CustomPaint(
+            size: const Size(260, 260),
+            painter: CompassRadarPainter(
+              neonColor: HomeScreen.neonLime,
+              purpleColor: HomeScreen.softPurple,
+            ),
+          ),
+
+          // Central Compass Dial
+          Container(
+            width: 110,
+            height: 110,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF13131F),
+              border: Border.all(
+                color: HomeScreen.neonLime.withValues(alpha: 0.4),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: HomeScreen.neonLime.withValues(alpha: 0.15),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Cardinal directions
+                const Positioned(
+                  top: 8,
+                  child: Text(
+                    'N',
+                    style: TextStyle(
+                      color: HomeScreen.neonLime,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                const Positioned(
+                  bottom: 8,
+                  child: Text(
+                    'S',
+                    style: TextStyle(
+                      color: Colors.white38,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Positioned(
+                  right: 10,
+                  child: Text(
+                    'E',
+                    style: TextStyle(
+                      color: Colors.white38,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Positioned(
+                  left: 10,
+                  child: Text(
+                    'W',
+                    style: TextStyle(
+                      color: Colors.white38,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                // Center Hub with W
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: HomeScreen.background,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: HomeScreen.softPurple.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'W',
+                      style: TextStyle(
+                        color: HomeScreen.neonLime,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Icon(
-                    l10n.isArabic
-                        ? Icons.arrow_back_rounded
-                        : Icons.arrow_forward_rounded,
-                    size: 19,
-                    color: background,
+                ),
+                // Needle pointing North-East
+                Transform.rotate(
+                  angle: 0.785, // 45 degrees
+                  child: Container(
+                    width: 3,
+                    height: 58,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          HomeScreen.neonLime,
+                          Colors.transparent,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Floating Chip Top: "اهتماماتك" | "اعرف إيه المناسب ليك"
+          Positioned(
+            top: 10,
+            right: l10n.isArabic ? null : 12,
+            left: l10n.isArabic ? 12 : null,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF171723),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: HomeScreen.neonLime.withValues(alpha: 0.3),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 10,
                   ),
                 ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: HomeScreen.neonLime.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text('✳',
+                        style: TextStyle(
+                            color: HomeScreen.neonLime, fontSize: 11)),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l10n.heroCardInterestsTitle,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Text(
+                        l10n.heroCardInterestsSubtitle,
+                        style: const TextStyle(
+                          color: Colors.white60,
+                          fontSize: 9,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Floating Chip Bottom: "خطوتك الجاية" | "خطوة بخطوة"
+          Positioned(
+            bottom: 10,
+            left: l10n.isArabic ? null : 12,
+            right: l10n.isArabic ? 12 : null,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF171723),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: HomeScreen.softPurple.withValues(alpha: 0.3),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: HomeScreen.softPurple.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Icon(Icons.north_east_rounded,
+                        size: 12, color: HomeScreen.softPurple),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l10n.heroCardNextStepTitle,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Text(
+                        l10n.heroCardNextStepSubtitle,
+                        style: const TextStyle(
+                          color: Colors.white60,
+                          fontSize: 9,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Coordinate label
+          Positioned(
+            bottom: 18,
+            left: l10n.isArabic ? 14 : null,
+            right: l10n.isArabic ? null : 14,
+            child: Text(
+              l10n.coordinateLabel,
+              style: const TextStyle(
+                color: Colors.white24,
+                fontSize: 10,
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -568,18 +1064,18 @@ class HomeScreen extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        // Responsive columns & aspect ratios:
-        // Desktop / wide screen (>= 860px): 3 columns, 1.35 aspect ratio
-        // Tablet screen (580px - 859px): 3 columns, 1.15 aspect ratio
-        // Mobile screen (< 580px): 2 columns, 0.95 aspect ratio
+        // Responsive columns & aspect ratios for cards with domain illustrations:
+        // Desktop / wide screen (>= 860px): 3 columns, 1.05 aspect ratio
+        // Tablet screen (580px - 859px): 3 columns, 0.88 aspect ratio
+        // Mobile screen (< 580px): 2 columns, 0.74 aspect ratio
         final int crossAxisCount = width >= 860 ? 3 : (width >= 580 ? 3 : 2);
         final double childAspectRatio =
-            width >= 860 ? 1.35 : (width >= 580 ? 1.15 : 0.95);
+            width >= 860 ? 1.05 : (width >= 580 ? 0.88 : 0.74);
 
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: tracks.length,
+          itemCount: HomeScreen.tracks.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
             mainAxisSpacing: 14,
@@ -587,7 +1083,7 @@ class HomeScreen extends StatelessWidget {
             childAspectRatio: childAspectRatio,
           ),
           itemBuilder: (context, index) {
-            final track = tracks[index];
+            final track = HomeScreen.tracks[index];
             return _buildTrackCard(context, track, l10n);
           },
         );
@@ -605,9 +1101,9 @@ class HomeScreen extends StatelessWidget {
       onTap: () => _showTrackModal(context, track, l10n),
       borderRadius: BorderRadius.circular(18),
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: card,
+          color: HomeScreen.card,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: Colors.white.withValues(alpha: 0.08),
@@ -617,22 +1113,23 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Top Row: Domain Icon & Badge Pill
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
                     color: track.color.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     track.icon,
                     color: track.color,
-                    size: 22,
+                    size: 18,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Flexible(
                   child: Container(
                     padding:
@@ -655,31 +1152,63 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(height: 8),
+
+            // Field-Specific 3D Illustration Image
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: HomeScreen.background,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.06),
+                    ),
+                  ),
+                  child: Image.asset(
+                    track.imageAsset,
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stack) => Center(
+                      child: Icon(
+                        track.icon,
+                        color: track.color.withValues(alpha: 0.5),
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Track Title & Tech Stack Subtitle
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
                     height: 1.2,
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
                 Text(
                   techStack,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 10,
                     color: Colors.white54,
-                    height: 1.3,
                   ),
                 ),
               ],
@@ -1539,10 +2068,59 @@ class CareerTrackInfo {
   final String keyId;
   final IconData icon;
   final Color color;
+  final String imageAsset;
 
   const CareerTrackInfo({
     required this.keyId,
     required this.icon,
     required this.color,
+    required this.imageAsset,
   });
+}
+
+class CompassRadarPainter extends CustomPainter {
+  final Color neonColor;
+  final Color purpleColor;
+
+  CompassRadarPainter({
+    required this.neonColor,
+    required this.purpleColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final maxRadius = size.width / 2;
+
+    // Outer and inner orbit circles
+    final orbitPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.08)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    final glowPaint = Paint()
+      ..color = neonColor.withValues(alpha: 0.16)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+
+    final purpleGlow = Paint()
+      ..color = purpleColor.withValues(alpha: 0.14)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    canvas.drawCircle(center, maxRadius * 0.94, orbitPaint);
+    canvas.drawCircle(center, maxRadius * 0.72, glowPaint);
+    canvas.drawCircle(center, maxRadius * 0.48, purpleGlow);
+    canvas.drawCircle(center, maxRadius * 0.26, glowPaint);
+
+    // Cross lines through center
+    final crossPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.05)
+      ..strokeWidth = 0.8;
+    canvas.drawLine(Offset(center.dx, 10), Offset(center.dx, size.height - 10), crossPaint);
+    canvas.drawLine(Offset(10, center.dy), Offset(size.width - 10, center.dy), crossPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
