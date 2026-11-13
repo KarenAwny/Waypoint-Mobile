@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   static const Color background = Color(0xFF0A0A0F);
   static const Color neonLime = Color(0xFFC5FF4A);
   static const Color softPurple = Color(0xFF9B7BFF);
+  static const Color card = Color(0xFF171720);
 
   @override
   void dispose() {
@@ -100,22 +101,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        width: 44,
+                        height: 44,
+                        padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: neonLime,
+                          color: card,
                           borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: neonLime.withValues(alpha: 0.35),
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: neonLime.withValues(alpha: 0.35),
+                              color: neonLime.withValues(alpha: 0.2),
                               blurRadius: 16,
                               offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.explore_rounded,
-                          color: background,
-                          size: 26,
+                        child: Image.asset(
+                          'assets/images/logo_mark.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                       const SizedBox(width: 12),

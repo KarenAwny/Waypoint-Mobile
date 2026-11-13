@@ -55,78 +55,88 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Top Bar / Branding & Profile Icon
-              _buildTopBar(context, l10n),
-
-              const SizedBox(height: 28),
-
-              // Hero Welcome Section
-              _buildHeroSection(context, l10n),
-
-              const SizedBox(height: 24),
-
-              // Quick Platform Stats Row
-              _buildPlatformStats(l10n),
-
-              // Real-time Firestore latest saved result card (if any)
-              _buildLatestSavedResultCard(context, l10n),
-
-              const SizedBox(height: 32),
-
-              // Section Header: Career Tracks
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1140),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    l10n.exploreCareerTracks,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: -0.5,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: card,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.08),
+                  // Top Bar / Branding & Profile Icon
+                  _buildTopBar(context, l10n),
+
+                  const SizedBox(height: 28),
+
+                  // Hero Welcome Section
+                  _buildHeroSection(context, l10n),
+
+                  const SizedBox(height: 24),
+
+                  // Quick Platform Stats Row
+                  _buildPlatformStats(l10n),
+
+                  // Real-time Firestore latest saved result card (if any)
+                  _buildLatestSavedResultCard(context, l10n),
+
+                  const SizedBox(height: 32),
+
+                  // Section Header: Career Tracks
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.exploreCareerTracks,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      l10n.tracksCount(tracks.length),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white70,
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: card,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.08),
+                          ),
+                        ),
+                        child: Text(
+                          l10n.tracksCount(tracks.length),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white70,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // Career Tracks Grid
+                  _buildCareerTracksGrid(context, l10n),
+
+                  const SizedBox(height: 30),
+
+                  // Interactive Assessment Banner
+                  _buildAssessmentCard(context, l10n),
+
+                  const SizedBox(height: 20),
                 ],
               ),
-
-              const SizedBox(height: 16),
-
-              // Career Tracks Grid
-              _buildCareerTracksGrid(context, l10n),
-
-              const SizedBox(height: 30),
-
-              // Interactive Assessment Banner
-              _buildAssessmentCard(context, l10n),
-
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
         ),
       ),
@@ -142,22 +152,26 @@ class HomeScreen extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(9),
+          width: 44,
+          height: 44,
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: neonLime,
+            color: card,
             borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: neonLime.withValues(alpha: 0.35),
+            ),
             boxShadow: [
               BoxShadow(
-                color: neonLime.withValues(alpha: 0.35),
+                color: neonLime.withValues(alpha: 0.2),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: const Icon(
-            Icons.explore_rounded,
-            color: background,
-            size: 24,
+          child: Image.asset(
+            'assets/images/logo_mark.png',
+            fit: BoxFit.contain,
           ),
         ),
         const SizedBox(width: 12),
@@ -334,13 +348,18 @@ class HomeScreen extends StatelessWidget {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    l10n.startCareerAssessment,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.2,
+                  Flexible(
+                    child: Text(
+                      l10n.startCareerAssessment,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.2,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -411,146 +430,167 @@ class HomeScreen extends StatelessWidget {
   /// Displays the latest saved assessment result from Cloud Firestore if available.
   Widget _buildLatestSavedResultCard(
       BuildContext context, AppLocalizations l10n) {
-    final user = AuthService().currentUser;
-    if (user == null || AuthService().isGuest) {
-      return const SizedBox.shrink();
-    }
+    try {
+      final auth = AuthService();
+      final user = auth.currentUser;
+      if (user == null || auth.isGuest) {
+        return const SizedBox.shrink();
+      }
 
-    return StreamBuilder<List<AssessmentResultModel>>(
-      stream: FirestoreService().getAssessmentHistoryStream(user.uid),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const SizedBox.shrink();
-        }
+      return StreamBuilder<List<AssessmentResultModel>>(
+        stream: FirestoreService().getAssessmentHistoryStream(user.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasError ||
+              !snapshot.hasData ||
+              snapshot.data == null ||
+              snapshot.data!.isEmpty) {
+            return const SizedBox.shrink();
+          }
 
-        final latest = snapshot.data!.first;
-        return Container(
-          margin: const EdgeInsets.only(top: 24),
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            color: card,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: neonLime.withValues(alpha: 0.35),
+          final latest = snapshot.data!.first;
+          return Container(
+            margin: const EdgeInsets.only(top: 24),
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: card,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: neonLime.withValues(alpha: 0.35),
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: neonLime.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.check_circle_rounded,
-                            size: 13, color: neonLime),
-                        const SizedBox(width: 5),
-                        Text(
-                          l10n.activeBlueprint,
-                          style: const TextStyle(
-                            color: neonLime,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: neonLime.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.check_circle_rounded,
+                              size: 13, color: neonLime),
+                          const SizedBox(width: 5),
+                          Text(
+                            l10n.activeBlueprint,
+                            style: const TextStyle(
+                              color: neonLime,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    '${latest.matchPercentage}%',
-                    style: const TextStyle(
-                      color: neonLime,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                l10n.localizedCareerTitle(latest.careerRecommendation),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l10n.secondarySynergy(latest.secondaryCareer),
-                style: const TextStyle(
-                  color: Colors.white60,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 14),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => Screen2(
-                        selectedInterest: latest.careerRecommendation,
-                        secondaryCareer: latest.secondaryCareer,
-                        matchPercentage: latest.matchPercentage,
-                        answers: latest.answers,
-                        isHistorical: true,
-                        savedDate: latest.createdAt,
+                        ],
                       ),
                     ),
-                  );
-                },
-                child: Row(
-                  children: [
                     Text(
-                      l10n.openSavedRecommendation,
+                      '${latest.matchPercentage}%',
                       style: const TextStyle(
                         color: neonLime,
+                        fontWeight: FontWeight.w900,
                         fontSize: 13,
-                        fontWeight: FontWeight.w800,
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Icon(
-                      l10n.isArabic
-                          ? Icons.arrow_back_rounded
-                          : Icons.arrow_forward_rounded,
-                      size: 16,
-                      color: neonLime,
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                const SizedBox(height: 12),
+                Text(
+                  l10n.localizedCareerTitle(latest.careerRecommendation),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.secondarySynergy(latest.secondaryCareer),
+                  style: const TextStyle(
+                    color: Colors.white60,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => Screen2(
+                          selectedInterest: latest.careerRecommendation,
+                          secondaryCareer: latest.secondaryCareer,
+                          matchPercentage: latest.matchPercentage,
+                          answers: latest.answers,
+                          isHistorical: true,
+                          savedDate: latest.createdAt,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        l10n.openSavedRecommendation,
+                        style: const TextStyle(
+                          color: neonLime,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(
+                        l10n.isArabic
+                            ? Icons.arrow_back_rounded
+                            : Icons.arrow_forward_rounded,
+                        size: 16,
+                        color: neonLime,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } catch (_) {
+      return const SizedBox.shrink();
+    }
   }
 
   Widget _buildCareerTracksGrid(BuildContext context, AppLocalizations l10n) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: tracks.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 14,
-        crossAxisSpacing: 14,
-        childAspectRatio: 0.88,
-      ),
-      itemBuilder: (context, index) {
-        final track = tracks[index];
-        return _buildTrackCard(context, track, l10n);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        // Responsive columns & aspect ratios:
+        // Desktop / wide screen (>= 860px): 3 columns, 1.35 aspect ratio
+        // Tablet screen (580px - 859px): 3 columns, 1.15 aspect ratio
+        // Mobile screen (< 580px): 2 columns, 0.95 aspect ratio
+        final int crossAxisCount = width >= 860 ? 3 : (width >= 580 ? 3 : 2);
+        final double childAspectRatio =
+            width >= 860 ? 1.35 : (width >= 580 ? 1.15 : 0.95);
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: tracks.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            mainAxisSpacing: 14,
+            crossAxisSpacing: 14,
+            childAspectRatio: childAspectRatio,
+          ),
+          itemBuilder: (context, index) {
+            final track = tracks[index];
+            return _buildTrackCard(context, track, l10n);
+          },
+        );
       },
     );
   }
@@ -575,6 +615,7 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -591,45 +632,57 @@ class HomeScreen extends StatelessWidget {
                     size: 22,
                   ),
                 ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    badge,
-                    style: TextStyle(
-                      color: track.color,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      badge,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: track.color,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-            const Spacer(),
-            Text(
-              title,
-              maxLines: 2,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                height: 1.2,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              techStack,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.white54,
-                height: 1.3,
-              ),
+            const SizedBox(height: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  techStack,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Colors.white54,
+                    height: 1.3,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -666,12 +719,16 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              Text(
-                l10n.personalizedGuidance,
-                style: const TextStyle(
-                  color: softPurple,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: Text(
+                  l10n.personalizedGuidance,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: softPurple,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
@@ -753,20 +810,23 @@ class HomeScreen extends StatelessWidget {
             return SingleChildScrollView(
               controller: scrollController,
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Handle bar
-                  Center(
-                    child: Container(
-                      width: 44,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.white24,
-                        borderRadius: BorderRadius.circular(2),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Handle bar
+                      Center(
+                        child: Container(
+                          width: 44,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
 
                   const SizedBox(height: 20),
 
@@ -1142,8 +1202,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            );
-          },
+            ),
+          ),
+        );
+      },
         );
       },
     );
@@ -1340,127 +1402,132 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
-        return Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: track.color.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(track.icon, color: track.color, size: 28),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              badge,
+                              style: TextStyle(
+                                color: track.color,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.keyTechnologies,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: track.color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(16),
+                      color: background,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.08),
+                      ),
                     ),
-                    child: Icon(track.icon, color: track.color, size: 28),
+                    child: Text(
+                      techStack,
+                      style: const TextStyle(
+                        color: neonLime,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                          ),
+                  const SizedBox(height: 22),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const Screen1()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: neonLime,
+                        foregroundColor: background,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          badge,
-                          style: TextStyle(
-                            color: track.color,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      ),
+                      child: Text(
+                        l10n.assessMyFit,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                description,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white70,
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                l10n.keyTechnologies,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: background,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.08),
-                  ),
-                ),
-                child: Text(
-                  techStack,
-                  style: const TextStyle(
-                    color: neonLime,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 22),
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const Screen1()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: neonLime,
-                    foregroundColor: background,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(
-                    l10n.assessMyFit,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

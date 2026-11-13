@@ -23,6 +23,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   static const Color background = Color(0xFF0A0A0F);
   static const Color neonLime = Color(0xFFC5FF4A);
   static const Color softPurple = Color(0xFF9B7BFF);
+  static const Color card = Color(0xFF171720);
 
   @override
   void dispose() {
@@ -95,20 +96,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 children: [
                   Center(
                     child: Container(
-                      width: 72,
-                      height: 72,
+                      width: 68,
+                      height: 68,
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: softPurple.withValues(alpha: 0.15),
+                        color: card,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: softPurple.withValues(alpha: 0.4),
+                          color: neonLime.withValues(alpha: 0.35),
                           width: 1.5,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: neonLime.withValues(alpha: 0.2),
+                            blurRadius: 18,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
-                      child: const Icon(
-                        Icons.lock_reset_rounded,
-                        color: softPurple,
-                        size: 34,
+                      child: Image.asset(
+                        'assets/images/logo_mark.png',
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),

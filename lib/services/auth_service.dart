@@ -10,20 +10,40 @@ class AuthService {
   factory AuthService() => _instance;
   AuthService._internal();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth get _auth => FirebaseAuth.instance;
   final FirestoreService _firestoreService = FirestoreService();
 
   // Local guest mode flag for offline or console-disabled anonymous sign-in fallback
   final ValueNotifier<bool> guestModeNotifier = ValueNotifier<bool>(false);
 
   /// Stream of authentication state changes.
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  Stream<User?> get authStateChanges {
+    try {
+      return _auth.authStateChanges();
+    } catch (e) {
+      debugPrint('Firebase Auth stream notice: $e');
+      return const Stream.empty();
+    }
+  }
 
   /// Currently authenticated Firebase user.
-  User? get currentUser => _auth.currentUser;
+  User? get currentUser {
+    try {
+      return _auth.currentUser;
+    } catch (e) {
+      debugPrint('Firebase Auth currentUser notice: $e');
+      return null;
+    }
+  }
 
   /// Whether user is in guest exploration mode.
-  bool get isGuest => guestModeNotifier.value || (_auth.currentUser?.isAnonymous ?? false);
+  bool get isGuest {
+    try {
+      return guestModeNotifier.value || (_auth.currentUser?.isAnonymous ?? false);
+    } catch (e) {
+      return true;
+    }
+  }
 
   /// Enable guest exploration mode.
   Future<void> enterGuestMode() async {

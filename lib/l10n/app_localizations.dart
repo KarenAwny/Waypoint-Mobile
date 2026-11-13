@@ -271,6 +271,17 @@ class AppLocalizations {
   // ---------------------------------------------------------------------------
   // Career Tracks Localization Helpers
   // ---------------------------------------------------------------------------
+  String _canonicalTrackKey(String key) {
+    final lower = key.trim().toLowerCase();
+    if (lower == 'frontend' || lower.contains('front')) return 'Frontend Engineering';
+    if (lower == 'backend' || lower.contains('back')) return 'Backend Systems';
+    if (lower == 'data' || lower.contains('data')) return 'Data Science & AI';
+    if (lower == 'cybersecurity' || lower.contains('cyber') || lower.contains('security')) return 'Cybersecurity';
+    if (lower == 'uiux' || lower.contains('design') || lower.contains('ui')) return 'UI / UX Design';
+    if (lower == 'mobile' || lower.contains('mobile')) return 'Mobile Development';
+    return key;
+  }
+
   String localizedCareerTitle(String key) {
     final lower = key.trim().toLowerCase();
     if (lower == 'frontend' || lower.contains('front')) {
@@ -295,8 +306,9 @@ class AppLocalizations {
   }
 
   String localizedCareerBadge(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return 'High Demand';
         case 'Frontend Engineering':
@@ -313,7 +325,7 @@ class AppLocalizations {
           return 'Trending';
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return 'طلب مرتفع جداً';
       case 'Frontend Engineering':
@@ -332,8 +344,9 @@ class AppLocalizations {
   }
 
   String localizedCareerTagline(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return 'Architect of Pocket-Sized Digital Experiences';
         case 'Frontend Engineering':
@@ -350,7 +363,7 @@ class AppLocalizations {
           return 'Future-Proof Tech Career';
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return 'مهندس التجارب الرقمية في جيوب الملايين';
       case 'Frontend Engineering':
@@ -369,8 +382,9 @@ class AppLocalizations {
   }
 
   String localizedCareerDescription(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return 'You thrive on delivering tangible, high-performance apps that people interact with hundreds of times a day. Your focus bridges smooth touch interactions, native device capabilities, and reactive state management.';
         case 'Frontend Engineering':
@@ -387,7 +401,7 @@ class AppLocalizations {
           return 'Explore this career path to build essential engineering skills.';
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return 'تتميز ببناء تطبيقات ملموسة وعالية الأداء يتفاعل معها الناس يومياً، جامعاً بين سلاسة الواجهات وقدرات الأجهزة والبرمجة التفاعلية.';
       case 'Frontend Engineering':
@@ -406,8 +420,9 @@ class AppLocalizations {
   }
 
   String localizedCareerTechStack(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return 'Flutter • Dart • iOS • Android';
         case 'Frontend Engineering':
@@ -424,7 +439,7 @@ class AppLocalizations {
           return 'Modern Tools';
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return 'فلاتر • دارت • iOS • أندرويد';
       case 'Frontend Engineering':
@@ -443,8 +458,9 @@ class AppLocalizations {
   }
 
   String localizedCareerDemand(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return '🔥 Very High Demand (Top 5 Tech Role)';
         case 'Frontend Engineering':
@@ -461,7 +477,7 @@ class AppLocalizations {
           return '🔥 High Demand';
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return '🔥 طلب وظيفي مرتفع جداً (ضمن أعلى 5 وظائف تقنية)';
       case 'Frontend Engineering':
@@ -480,8 +496,9 @@ class AppLocalizations {
   }
 
   String localizedCareerSalary(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return '\$85,000 - \$145,000 / yr';
         case 'Frontend Engineering':
@@ -498,7 +515,7 @@ class AppLocalizations {
           return '\$80,000 - \$140,000 / yr';
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return '85,000\$ - 145,000\$ سنوياً';
       case 'Frontend Engineering':
@@ -517,8 +534,9 @@ class AppLocalizations {
   }
 
   List<String> localizedCareerTraits(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return [
             'Device-native thinking',
@@ -565,7 +583,7 @@ class AppLocalizations {
           return ['Analytical mindset', 'Problem solver'];
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return [
           'التفكير الموجه لخصائص الأجهزة الذكية',
@@ -614,8 +632,9 @@ class AppLocalizations {
   }
 
   List<String> localizedTypicalRoles(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return [
             'Flutter Mobile Engineer',
@@ -656,7 +675,7 @@ class AppLocalizations {
           return ['Software Specialist'];
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return [
           'مهندس تطبيقات فلاتر',
@@ -699,8 +718,9 @@ class AppLocalizations {
   }
 
   List<Map<String, String>> localizedSkills(String key) {
+    final canon = _canonicalTrackKey(key);
     if (!isArabic) {
-      switch (key) {
+      switch (canon) {
         case 'Mobile Development':
           return [
             {'name': 'Flutter & Dart', 'category': 'Core Framework'},
@@ -771,7 +791,7 @@ class AppLocalizations {
           return [];
       }
     }
-    switch (key) {
+    switch (canon) {
       case 'Mobile Development':
         return [
           {'name': 'فلاتر ودارت (Flutter & Dart)', 'category': 'إطار العمل الأساسي'},

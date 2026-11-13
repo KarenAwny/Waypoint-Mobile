@@ -149,16 +149,27 @@ class _Screen2State extends State<Screen2> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          widget.isHistorical
-              ? (isArabic ? 'النتيجة المحفوظة' : 'Saved Recommendation')
-              : (isArabic ? 'المسار المقترح لك' : 'Your Recommended Path'),
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-            letterSpacing: 0.5,
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/logo_mark.png',
+              width: 22,
+              height: 22,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              widget.isHistorical
+                  ? (isArabic ? 'النتيجة المحفوظة' : 'Saved Recommendation')
+                  : (isArabic ? 'المسار المقترح لك' : 'Your Recommended Path'),
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
         ),
         actions: [
           Padding(

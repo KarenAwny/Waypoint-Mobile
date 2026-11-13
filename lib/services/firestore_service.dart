@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Data model representing a saved career assessment result in Cloud Firestore.
@@ -104,7 +105,7 @@ class FirestoreService {
   factory FirestoreService() => _instance;
   FirestoreService._internal();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseFirestore get _firestore => FirebaseFirestore.instance;
 
   // ---------------------------------------------------------------------------
   // User Profile Operations (users/{uid})
@@ -117,29 +118,46 @@ class FirestoreService {
     required String email,
     bool isAnonymous = false,
   }) async {
-    await _firestore.collection('users').doc(uid).set({
-      'uid': uid,
-      'fullName': fullName.trim(),
-      'email': email.trim().toLowerCase(),
-      'createdAt': FieldValue.serverTimestamp(),
-      'lastActive': FieldValue.serverTimestamp(),
-      'isAnonymous': isAnonymous,
-    }, SetOptions(merge: true));
+    try {
+      await _firestore.collection('users').doc(uid).set({
+        'uid': uid,
+        'fullName': fullName.trim(),
+        'email': email.trim().toLowerCase(),
+        'createdAt': FieldValue.serverTimestamp(),
+        'lastActive': FieldValue.serverTimestamp(),
+        'isAnonymous': isAnonymous,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      debugPrint('Firestore saveUserProfile notice: $e');
+    }
   }
 
   /// Retrieve the user's profile once from `users/{uid}`.
   Future<UserProfileModel?> getUserProfile(String uid) async {
-    final doc = await _firestore.collection('users').doc(uid).get();
-    if (!doc.exists) return null;
-    return UserProfileModel.fromFirestore(doc);
+    try {
+      final doc = await _firestore.collection('users').doc(uid).get();
+      if (!doc.exists) return null;
+      return UserProfileModel.fromFirestore(doc);
+    } catch (e) {
+      debugPrint('Firestore getUserProfile notice: $e');
+      return null;
+    }
   }
 
   /// Stream real-time updates for `users/{uid}`.
   Stream<UserProfileModel?> getUserProfileStream(String uid) {
-    return _firestore.collection('users').doc(uid).snapshots().map((doc) {
-      if (!doc.exists) return null;
-      return UserProfileModel.fromFirestore(doc);
-    });
+    try {
+      return _firestore.collection('users').doc(uid).snapshots().map((doc) {
+        if (!doc.exists) return null;
+        return UserProfileModel.fromFirestore(doc);
+      }).handleError((error) {
+        debugPrint('Firestore getUserProfileStream error: $error');
+        return null;
+      });
+    } catch (e) {
+      debugPrint('Firestore getUserProfileStream init error: $e');
+      return const Stream.empty();
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -174,31 +192,44 @@ class FirestoreService {
 
   /// Stream previous assessment results for a specific user ordered by latest first.
   Stream<List<AssessmentResultModel>> getAssessmentHistoryStream(String uid) {
-    return _firestore
-        .collection('users')
-        .doc(uid)
-        .collection('assessmentResults')
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => AssessmentResultModel.fromFirestore(doc))
-          .toList();
-    });
+    try {
+      return _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('assessmentResults')
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .map((snapshot) {
+        return snapshot.docs
+            .map((doc) => AssessmentResultModel.fromFirestore(doc))
+            .toList();
+      }).handleError((error) {
+        debugPrint('Firestore history stream error: $error');
+        return <AssessmentResultModel>[];
+      });
+    } catch (e) {
+      debugPrint('Firestore history stream init error: $e');
+      return const Stream.empty();
+    }
   }
 
   /// Fetch previous assessment results once for a specific user.
   Future<List<AssessmentResultModel>> getAssessmentHistory(String uid) async {
-    final snapshot = await _firestore
-        .collection('users')
-        .doc(uid)
-        .collection('assessmentResults')
-        .orderBy('createdAt', descending: true)
-        .get();
+    try {
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('assessmentResults')
+          .orderBy('createdAt', descending: true)
+          .get();
 
-    return snapshot.docs
-        .map((doc) => AssessmentResultModel.fromFirestore(doc))
-        .toList();
+      return snapshot.docs
+          .map((doc) => AssessmentResultModel.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      debugPrint('Firestore getAssessmentHistory notice: $e');
+      return [];
+    }
   }
 }
 

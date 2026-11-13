@@ -26,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Waypoint Brand Palette
   static const Color background = Color(0xFF0A0A0F);
   static const Color neonLime = Color(0xFFC5FF4A);
+  static const Color card = Color(0xFF171720);
 
   @override
   void dispose() {
@@ -98,6 +99,61 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top Brand Logo Row
+                  Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: card,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: neonLime.withValues(alpha: 0.35),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: neonLime.withValues(alpha: 0.2),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Image.asset(
+                          'assets/images/logo_mark.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.appName.toUpperCase(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.5,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              l10n.careerNavigationPlatform,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
                   // Brand Header Pill
                   Container(
                     padding: const EdgeInsets.symmetric(

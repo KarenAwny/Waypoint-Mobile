@@ -121,16 +121,27 @@ class _Screen1State extends State<Screen1> {
           ),
           onPressed: _onPrevious,
         ),
-        title: Text(
-          isArabic
-              ? 'تقييم المسار المهني'
-              : 'Career Assessment',
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-            letterSpacing: 0.5,
-          ),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/logo_mark.png',
+              width: 22,
+              height: 22,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              isArabic
+                  ? 'تقييم المسار المهني'
+                  : 'Career Assessment',
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
         ),
         actions: [
           // Language switcher button (allows switching without resetting answers)

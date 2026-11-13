@@ -48,3 +48,10 @@ app.*.map.json
 .widget_preview/
 
 firebase-tools-instant-win.exe
+
+
+# Vercel / CI SDK & Temporary files
+.vercel/
+flutter/
+flutter-sdk/
+.flutter-sdk/
